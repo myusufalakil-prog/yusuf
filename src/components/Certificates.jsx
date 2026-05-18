@@ -7,7 +7,7 @@ import { useAdmin } from '../admin/AdminContext'
 function CertModal({ cert, onClose }) {
   return (
     <motion.div
-      className="fixed inset-0 z-[200] flex items-center justify-center p-6"
+      className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -16,8 +16,8 @@ function CertModal({ cert, onClose }) {
       <div className="modal-backdrop absolute inset-0" />
 
       <motion.div
-        className="relative z-10 max-w-2xl w-full glass-card-dark rounded-sm overflow-hidden"
-        style={{ border: `1px solid ${cert.color}40` }}
+        className="relative z-10 w-full max-w-3xl glass-card-dark rounded-sm overflow-hidden"
+        style={{ border: `1px solid ${cert.color}40`, maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}
         initial={{ scale: 0.85, y: 40 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.85, y: 40 }}
@@ -27,37 +27,41 @@ function CertModal({ cert, onClose }) {
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 text-ivory/60 hover:text-ivory transition-colors p-2"
-          style={{ cursor: 'none' }}
+          className="absolute top-3 right-3 z-20 text-ivory/60 hover:text-ivory transition-colors p-2 rounded-full glass-card-dark"
+          style={{ cursor: 'pointer' }}
         >
           <FiX size={20} />
         </button>
 
-        {/* Image */}
-        <div className="relative h-56 sm:h-72">
-          <img
-            src={cert.image}
-            alt={cert.title}
-            className="w-full h-full object-cover"
-            style={{ filter: 'brightness(0.7) saturate(1.1)' }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-midnight/80 to-transparent" />
-          <div className="absolute bottom-6 left-6 text-4xl">{cert.badge}</div>
-        </div>
+        {/* Full image — no crop, no dark filter */}
+        <div className="overflow-y-auto flex-1">
+          <div className="relative bg-black/40">
+            <img
+              src={cert.image}
+              alt={cert.title}
+              className="w-full h-auto object-contain"
+              style={{ maxHeight: '55vh', objectPosition: 'center' }}
+            />
+            {/* Badge overlay */}
+            <div className="absolute top-4 left-4 text-4xl">{cert.badge}</div>
+          </div>
 
-        {/* Content */}
-        <div className="p-8">
-          <p className="font-cinzel text-xs tracking-[0.4em] uppercase mb-2" style={{ color: cert.color }}>
-            Certificate of Achievement
-          </p>
-          <h3 className="font-playfair text-2xl text-ivory mb-2">{cert.title}</h3>
-          <p className="font-inter text-ivory/50 text-sm mb-1">Issued by <span className="text-ivory/80">{cert.issuer}</span></p>
-          <p className="font-inter text-ivory/40 text-xs">{cert.date}</p>
+          {/* Content */}
+          <div className="p-6 sm:p-8">
+            <p className="font-cinzel text-xs tracking-[0.4em] uppercase mb-2" style={{ color: cert.color }}>
+              Certificate of Achievement
+            </p>
+            <h3 className="font-playfair text-xl sm:text-2xl text-ivory mb-2">{cert.title}</h3>
+            <p className="font-inter text-ivory/50 text-sm mb-1">
+              Issued by <span className="text-ivory/80">{cert.issuer}</span>
+            </p>
+            <p className="font-inter text-ivory/40 text-xs">{cert.date}</p>
 
-          <div className="mt-6 h-px" style={{ background: `linear-gradient(to right, ${cert.color}40, transparent)` }} />
-          <p className="font-cinzel text-xs tracking-widest uppercase text-ivory/30 mt-4">
-            Verified Achievement
-          </p>
+            <div className="mt-6 h-px" style={{ background: `linear-gradient(to right, ${cert.color}40, transparent)` }} />
+            <p className="font-cinzel text-xs tracking-widest uppercase text-ivory/30 mt-4">
+              Verified Achievement
+            </p>
+          </div>
         </div>
       </motion.div>
     </motion.div>
