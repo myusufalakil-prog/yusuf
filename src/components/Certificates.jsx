@@ -35,12 +35,11 @@ function CertModal({ cert, onClose }) {
 
         {/* Full image — no crop, no dark filter */}
         <div className="overflow-y-auto flex-1">
-          <div className="relative bg-black/40">
+          <div className="relative bg-black/20">
             <img
               src={cert.image}
               alt={cert.title}
-              className="w-full h-auto object-contain"
-              style={{ maxHeight: '55vh', objectPosition: 'center' }}
+              className="w-full h-auto block"
             />
             {/* Badge overlay */}
             <div className="absolute top-4 left-4 text-4xl">{cert.badge}</div>
