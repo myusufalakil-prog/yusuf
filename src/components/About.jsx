@@ -47,25 +47,29 @@ export default function About() {
           </div>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 xl:gap-20 items-stretch">
           {/* Left: Image */}
           <motion.div
-            className="relative"
+            className="relative flex"
             initial={{ opacity: 0, x: -50 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 1, delay: 0.2 }}
           >
-            <div className="relative w-full max-w-md mx-auto">
-              <div className="absolute -top-4 -left-4 w-24 h-24 border-t-2 border-l-2 border-champagne-400/40 rounded-tl-lg" />
-              <div className="absolute -bottom-4 -right-4 w-24 h-24 border-b-2 border-r-2 border-emerald-600/40 rounded-br-lg" />
-              <div className="relative overflow-hidden rounded-sm shadow-luxury">
+            <div className="relative w-full">
+              {/* Corner decorations */}
+              <div className="absolute -top-4 -left-4 w-20 h-20 border-t-2 border-l-2 border-champagne-400/40 rounded-tl-lg z-10" />
+              <div className="absolute -bottom-4 -right-4 w-20 h-20 border-b-2 border-r-2 border-emerald-600/40 rounded-br-lg z-10" />
+
+              <div className="relative overflow-hidden rounded-sm shadow-luxury h-full min-h-[420px]">
                 <img
                   src={photo}
                   alt="About Yusuf"
-                  className="w-full h-[450px] object-cover"
-                  style={{ filter: 'brightness(0.8) saturate(1.1)' }}
+                  className="w-full h-full object-cover object-top"
+                  style={{ filter: 'brightness(0.85) saturate(1.1)' }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-midnight/60 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-midnight/70 via-midnight/10 to-transparent" />
+
+                {/* Badge */}
                 <div className="absolute bottom-6 left-6 glass-card-dark px-4 py-3 rounded-sm border-gold">
                   <p className="font-cinzel text-xs tracking-widest text-champagne-400 uppercase">SMKN 1 Ciomas</p>
                   <div className="flex items-center gap-2 mt-1">
@@ -79,29 +83,32 @@ export default function About() {
 
           {/* Right: Text */}
           <motion.div
+            className="flex"
             initial={{ opacity: 0, x: 50 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 1, delay: 0.4 }}
           >
-            <div className="glass-card rounded-sm p-8 sm:p-10 border-gold">
-              <p className="font-cinzel text-xs tracking-[0.4em] text-emerald-400 uppercase mb-6">
+            <div className="glass-card rounded-sm p-8 xl:p-10 border-gold w-full flex flex-col justify-center">
+              <p className="font-cinzel text-xs tracking-[0.4em] text-emerald-400 uppercase mb-5">
                 My Story
               </p>
 
-              <h3 className="font-playfair text-2xl sm:text-3xl text-ivory mb-6 leading-snug">
+              <h3 className="font-playfair text-2xl xl:text-3xl text-ivory mb-6 leading-snug">
                 Siswa SMKN 1 Ciomas dengan{' '}
                 <span className="italic text-champagne-400">Semangat Coding</span>
               </h3>
 
-              <div className="space-y-4 font-inter text-ivory/65 leading-relaxed">
+              <div className="space-y-4 font-inter text-ivory/65 text-sm xl:text-base leading-relaxed">
                 {bio.map((p, i) => <p key={i}>{p}</p>)}
               </div>
 
-              <div className="flex flex-wrap gap-2 mt-8">
+              <div className="h-px w-full bg-champagne-400/10 my-6" />
+
+              <div className="flex flex-wrap gap-2">
                 {tags.map(tag => (
                   <span
                     key={tag}
-                    className="font-cinzel text-xs tracking-widest uppercase px-3 py-1 border border-champagne-400/20 text-champagne-400/80 rounded-sm"
+                    className="font-cinzel text-xs tracking-widest uppercase px-3 py-1.5 border border-champagne-400/20 text-champagne-400/80 rounded-sm hover:border-champagne-400/50 transition-colors"
                   >
                     {tag}
                   </span>
