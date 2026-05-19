@@ -183,7 +183,7 @@ export default function Certificates() {
                 whileTap={{ scale: 0.97 }}
                 style={{ cursor: 'none' }}
               >
-                Lihat Selengkapnya ({certificates.length - INITIAL_SHOW} lagi) ↓
+                Lihat Selengkapnya ↓
               </motion.button>
             ) : (
               <motion.button
