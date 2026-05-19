@@ -137,10 +137,21 @@ function ProjectCard({ project, index, inView }) {
 export default function Projects() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.05 })
   const [filter, setFilter] = useState('All')
+  const [showAll, setShowAll] = useState(false)
   const { projects } = useAdmin()
+
+  const INITIAL_SHOW = 6
 
   const categories = ['All', ...new Set(projects.map(p => p.category))]
   const filtered = filter === 'All' ? projects : projects.filter(p => p.category === filter)
+  const displayed = showAll ? filtered : filtered.slice(0, INITIAL_SHOW)
+  const hasMore = filtered.length > INITIAL_SHOW && !showAll
+
+  // Reset showAll when filter changes
+  const handleFilter = (cat) => {
+    setFilter(cat)
+    setShowAll(false)
+  }
 
   return (
     <section id="projects" className="relative py-32 overflow-hidden" ref={ref}>
@@ -173,7 +184,7 @@ export default function Projects() {
             {categories.map(cat => (
               <button
                 key={cat}
-                onClick={() => setFilter(cat)}
+                onClick={() => handleFilter(cat)}
                 className={`font-cinzel text-xs tracking-widest uppercase px-4 py-2 rounded-sm transition-all duration-300 ${
                   filter === cat
                     ? 'bg-champagne-600 text-midnight'
@@ -189,18 +200,52 @@ export default function Projects() {
 
         {/* Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-          {filtered.map((project, i) => (
+          {displayed.map((project, i) => (
             <ProjectCard key={project.id} project={project} index={i} inView={inView} />
           ))}
         </div>
 
-        {/* Bottom CTA */}
+        {/* Show count indicator */}
+        {filtered.length > INITIAL_SHOW && (
+          <motion.p
+            className="text-center font-cinzel text-xs tracking-widest text-ivory/30 mt-8"
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : {}}
+          >
+            Menampilkan {displayed.length} dari {filtered.length} project
+          </motion.p>
+        )}
+
+        {/* Load More / Show Less buttons */}
         <motion.div
-          className="text-center mt-16"
+          className="text-center mt-8 flex flex-col sm:flex-row items-center justify-center gap-4"
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.8 }}
+          transition={{ delay: 0.6 }}
         >
+          {hasMore && (
+            <motion.button
+              onClick={() => setShowAll(true)}
+              className="btn-gold inline-flex items-center gap-3 px-8 py-3.5 text-sm rounded-sm font-cinzel tracking-widest uppercase"
+              whileHover={{ scale: 1.03, boxShadow: '0 0 30px rgba(212,146,42,0.3)' }}
+              whileTap={{ scale: 0.97 }}
+              style={{ cursor: 'none' }}
+            >
+              Lihat Semua ({filtered.length - INITIAL_SHOW} lagi) ↓
+            </motion.button>
+          )}
+
+          {showAll && filtered.length > INITIAL_SHOW && (
+            <motion.button
+              onClick={() => { setShowAll(false); document.getElementById('projects').scrollIntoView({ behavior: 'smooth' }) }}
+              className="font-cinzel text-xs tracking-widest uppercase text-ivory/40 hover:text-ivory px-6 py-3.5 border border-ivory/10 hover:border-ivory/30 rounded-sm transition-all"
+              whileHover={{ scale: 1.03 }}
+              style={{ cursor: 'none' }}
+            >
+              Tutup ↑
+            </motion.button>
+          )}
+
           <a
             href="https://github.com"
             target="_blank"
