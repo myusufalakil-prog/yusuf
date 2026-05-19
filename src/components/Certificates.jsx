@@ -70,7 +70,12 @@ function CertModal({ cert, onClose }) {
 export default function Certificates() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
   const [selected, setSelected] = useState(null)
+  const [showAll, setShowAll] = useState(false)
   const { certs: certificates } = useAdmin()
+
+  const INITIAL_SHOW = 3
+  const displayed = showAll ? certificates : certificates.slice(0, INITIAL_SHOW)
+  const hasMore = certificates.length > INITIAL_SHOW && !showAll
 
   return (
     <section id="certificates" className="relative py-32 overflow-hidden" ref={ref}>
@@ -100,7 +105,7 @@ export default function Certificates() {
 
         {/* Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {certificates.map((cert, i) => (
+          {displayed.map((cert, i) => (
             <motion.div
               key={cert.id}
               className="relative group cursor-pointer overflow-hidden rounded-sm"
@@ -157,6 +162,44 @@ export default function Certificates() {
             </motion.div>
           ))}
         </div>
+
+        {/* Counter + Buttons */}
+        {certificates.length > INITIAL_SHOW && (
+          <motion.div
+            className="text-center mt-12 flex flex-col items-center gap-4"
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : {}}
+            transition={{ delay: 0.5 }}
+          >
+            <p className="font-cinzel text-xs tracking-widest text-ivory/30">
+              Menampilkan {displayed.length} dari {certificates.length} sertifikat
+            </p>
+
+            {hasMore ? (
+              <motion.button
+                onClick={() => setShowAll(true)}
+                className="btn-gold inline-flex items-center gap-3 px-8 py-3.5 text-sm rounded-sm font-cinzel tracking-widest uppercase"
+                whileHover={{ scale: 1.03, boxShadow: '0 0 30px rgba(212,146,42,0.3)' }}
+                whileTap={{ scale: 0.97 }}
+                style={{ cursor: 'none' }}
+              >
+                Lihat Selengkapnya ({certificates.length - INITIAL_SHOW} lagi) ↓
+              </motion.button>
+            ) : (
+              <motion.button
+                onClick={() => {
+                  setShowAll(false)
+                  document.getElementById('certificates').scrollIntoView({ behavior: 'smooth' })
+                }}
+                className="font-cinzel text-xs tracking-widest uppercase text-ivory/40 hover:text-ivory px-6 py-3.5 border border-ivory/10 hover:border-ivory/30 rounded-sm transition-all"
+                whileHover={{ scale: 1.03 }}
+                style={{ cursor: 'none' }}
+              >
+                Tutup ↑
+              </motion.button>
+            )}
+          </motion.div>
+        )}
       </div>
 
       {/* Modal */}
